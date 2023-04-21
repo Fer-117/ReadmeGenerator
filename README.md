@@ -1,4 +1,4 @@
-      # Automatic README creator
+# Automatic README creator
 
       ## Table of contents
       - [Description](#Description)
