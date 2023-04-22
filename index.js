@@ -10,7 +10,6 @@ function writeToFile(fileName, data) {
 }
 
 function getDescription(answer) {
-  console.log(`inside getDescription function ${answer}`);
   return fetch(`https://api.github.com/licenses/${answer}`)
     .then((response) => {
       return response.json();
@@ -78,8 +77,6 @@ function showQuestions(licenses) {
       });
     })
     .then((data) => {
-      console.log(data.licenseDescription);
-      console.log(data.answers.license);
       const badgeUrl = `https://img.shields.io/badge/license-${data.answers.license}-GREEN.svg`;
 
       const markdownBadge = `![License](${badgeUrl})`;
