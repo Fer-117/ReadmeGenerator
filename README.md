@@ -33,6 +33,9 @@ There are no guidelines to contribute at the moment but if you have any suggesti
 ## Tests
 There are no tests generated for this project at the moment, they will be implemented some time in the near future.
 
+## Code Walktrough
+https://drive.google.com/file/d/1YAihquREK6Li__zCGmIppceb4wTVH_Bj/view
+
 ## Questions
 https://github.com/Fer-117
 
