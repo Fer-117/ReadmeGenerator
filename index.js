@@ -9,6 +9,19 @@ function writeToFile(fileName, data) {
   });
 }
 
+function getDescription(answer) {
+  console.log(`inside getDescription function ${answer}`);
+  return fetch(`https://api.github.com/licenses/${answer}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      const description = data.description;
+      // console.log(description);
+      return description;
+    });
+}
+
 function showQuestions(licenses) {
   inquirer
     .prompt([
@@ -60,43 +73,59 @@ function showQuestions(licenses) {
       },
     ])
     .then((answers) => {
+      return getDescription(answers.license).then((licenseDescription) => {
+        return { licenseDescription, answers };
+      });
+    })
+    .then((data) => {
+      console.log(data.licenseDescription);
+      console.log(data.answers.license);
+      const badgeUrl = `https://img.shields.io/badge/license-${data.answers.license}-GREEN.svg`;
+
+      const markdownBadge = `![License](${badgeUrl})`;
+
       const readmeContent = `
-      # ${answers.title}
-      
-      ## Table of contents
-      - [Description](#Description)
-      - [Installation](#Installation)
-      - [Usage](#Usage)
-      - [License](#License)
-      - [Contributing](#Contributing)
-      - [Questions](#Questions)
-      
-      ## Description
-      
-      ${answers.description}
-      
-      ## Installation
-      
-      ${answers.installation}
-      
-      ## Usage
-      ${answers.usage}
-      
-      ## License
-      ${answers.license}
-      
-      ## Contributing
-      ${answers.contributing}
-      
-      ## Tests
-      ${answers.tests}
-      
-      ## Questions
-      https://github.com/${answers.github}
-      
-      ${answers.email}
-      
-      `;
+# ${data.answers.title}
+
+${markdownBadge}
+
+## Table of contents
+- [Description](#Description)
+- [Installation](#Installation)
+- [Usage](#Usage)
+- [License](#License)
+- [Contributing](#Contributing)
+- [Questions](#Questions)
+
+## Description
+
+${data.answers.description}
+
+## Installation
+
+${data.answers.installation}
+
+## Usage
+${data.answers.usage}
+
+## ${data.answers.license} License
+${data.licenseDescription}
+
+${data.answers.description}
+
+## Contributing
+${data.answers.contributing}
+
+## Tests
+${data.answers.tests}
+
+## Questions
+https://github.com/${data.answers.github}
+
+Feel free to reach out to the following email with any questions or suggestions.
+${data.answers.email}
+
+`;
       writeToFile("README.md", readmeContent);
     });
 }
